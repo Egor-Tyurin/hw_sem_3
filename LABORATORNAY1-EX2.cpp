@@ -18,16 +18,17 @@ using namespace std;
 
 
 int main() {
-    int rows;
+    setlocale(LC_ALL, "rus"); //подключаем распознавание русского алфавита
+    int a;
     cout << "Введите количество строк треугольника Фибоначчи: " << endl;
-    cin >> rows;
+    cin >> a;
 
-    int** arr = new int*[rows];
-    for (int i = 0; i < rows; i++) {
+    int** arr = new int*[a];
+    for (int i = 0; i < a; i++) {
         arr[i] = new int[i + 1];
     }
 
-    for (int i = 0; i < rows; i++) {
+    for (int i = 0; i < a; i++) {
         for (int j = 0; j <= i; j++) {
             if (i == 0 || j == 0 || j == i) 
             {
@@ -43,7 +44,7 @@ int main() {
         cout << endl;
     }
 
-    for (int i = 0; i < rows; i++) {
+    for (int i = 0; i < a; i++) {
         delete[] arr[i];
     }
     delete[] arr;
