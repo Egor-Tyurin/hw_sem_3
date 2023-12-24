@@ -1,32 +1,30 @@
 #include <iostream>
 #include <cmath>
 #include <fstream>
-#include <cstdlib>
-#include <ctime>
 #define EPSILON pow(10, -5)
-#define GRV pow(6.6743, pow(10, -11))
+#define GRV pow(6.6743, pow(10, -20)) // Р“СЂР°РІРёС‚Р°С†РёРѕРЅРЅР°СЏ РїРѕСЃС‚РѕСЏРЅРЅР°СЏ , РєРј**3/(СЃ**2 * РєРі)
+#define PI 3.1415926535897932384626433832795
 
 using namespace std;
 
-double Iterations_Type(double n, double e, double M) { // Метод итераций
-    double Ek1;
-    double Ek = M;
-    for (int i = 0; i < 70; i++) {
-        Ek1 = e * sin(Ek) + M;
-        if (abs(Ek1 - Ek) < EPSILON)
-            return Ek1;
-        Ek = Ek1;
+double Iterations_Type(double n, double e, double M) {
+    double E1, E = M;
+    for (int i = 0; i < 100; i++) {
+        E1 = e * sin(E) + M;
+        if (abs(E1 - E) < EPSILON)
+            return E1;
+        E = E1;
     }
     return 0;
 }
 
-double Half_Division_Type(double e, double M) { // Метод половинного деления
-    double A = M - 2; // Левая граница рассматриваемого интервала
-    double B = M + 2; // Правая граница рассматриваемого интервала
-    double C; // Новая граница
+double Half_Division_Type(double e, double M) {
+    double A = M - 2;
+    double B = M + 2;
+    double C;
 
     if (((A - e * sin(A) - M) * (B - e * sin(B) - M)) < 0) {
-        for (int i = 0; i < 70; i++) {
+        for (int i = 0; i < 100; i++) {
             C = (A + B) / 2;
             if (abs(C - e * sin(C) - M) < EPSILON)
                 return C;
@@ -39,13 +37,13 @@ double Half_Division_Type(double e, double M) { // Метод половинного деления
     return 0;
 }
 
-double Golden_Ratio_Type(double e, double M) { // Метод золотого сечения
-    double A = M - 2; // Левая граница рассматриваемого интервала
-    double B = M + 2; // Правая граница рассматриваемого интервала
-    double C; // Новая граница
+double Golden_Ratio_Type(double e, double M) {
+    double A = M - 2;
+    double B = M + 2;
+    double C;
 
     if (((A - e * sin(A) - M) * (B - e * sin(B) - M)) < 0) {
-        for (int i = 0; i < 70; i++) {
+        for (int i = 0; i < 200; i++) {
             C = A + ((B - A) / ((sqrt(5) + 1) / 2));
             if (abs(C - e * sin(C) - M) < EPSILON)
                 return C;
@@ -58,10 +56,9 @@ double Golden_Ratio_Type(double e, double M) { // Метод золотого сечения
     return 0;
 }
 
-
-double Newton_Type(double e, double M) { // Метод Ньютона(Метод касательных)
-    double Ek = M;
-    double Ek1 = M;
+double Newton_Type(double e, double M) {
+    double E = M;
+    double E1 = M;
     double F;
     double F1;
     double tE;
@@ -69,45 +66,52 @@ double Newton_Type(double e, double M) { // Метод Ньютона(Метод касательных)
 
     for (int i = 0; i < 100; i++) {
         if (i == 0)
-            Ek1 = Ek - ((Ek - e * sin(Ek) - M) / (1 - e * cos(Ek)));
+            E1 = E - ((E - e * sin(E) - M) / (1 - e * cos(E)));
         else
-            Ek1 = Ek - ((Ek - e * sin(Ek) - M) / ((F1 - F) / (tE1 - tE)));
-        if (abs(Ek1 - Ek) < EPSILON)
-            return Ek1;
+            E1 = E - ((E - e * sin(E) - M) / ((F1 - F) / (tE1 - tE)));
+        if (abs(E1 - E) < EPSILON)
+            return E1;
 
-        F = Ek - e * sin(Ek) - M;
-        F1 = Ek1 - e * sin(Ek1) - M;
-        tE = Ek;
-        tE1 = Ek1;
+        F = E - e * sin(E) - M;
+        F1 = E1 - e * sin(E1) - M;
+        tE = E;
+        tE1 = E1;
 
-        Ek = Ek1;
+        E = E1;
     }
     return 0;
 }
 
 
 int main() {
-    double Ra = 10749; // Радиус Апоцентра
-    double Rp = 275; // Радиус Перицентра
-    double a = (Rp + Ra) / 2; // Большая полуось орбиты
-    double e = (Ra - Rp) / (2 * a); // Эксцентриситет орбиты
-    double n = sqrt(GRV / pow(a, 3)); // Угловая скорость 
-    double T = 7.08 * 3600; // Период обращения , с
+    double Ra = 14138.5; // Р Р°РґРёСѓСЃ РђРїРѕС†РµРЅС‚СЂР°
+    double Rp = 3664.5; // Р Р°РґРёСѓСЃ РџРµСЂРёС†РµРЅС‚СЂР°
+    double a = (Rp + Ra) / 2; // Р‘РѕР»СЊС€Р°СЏ РїРѕР»СѓРѕСЃСЊ РѕСЂР±РёС‚С‹
+    double e = (Ra - Rp) / (2 * a); // Р­РєСЃС†РµРЅС‚СЂРёСЃРёС‚РµС‚ РѕСЂР±РёС‚С‹
+    double Massa = 0.642 * pow(10, 24); // РњР°СЃСЃР° РњР°СЂСЃР° , РєРі
+    double mu = 42828; //Р“СЂР°РІРёС‚Р°С†РёРѕРЅРЅС‹Р№ РїР°СЂР°РјРµС‚СЂ РњР°СЂСЃР°
+    double n = sqrt(mu / pow(a, 3)); // РЈРіР»РѕРІР°СЏ СЃРєРѕСЂРѕСЃС‚СЊ 
+    double T_double = (2 * PI) / n;
+    int T = static_cast<int>(T_double); //РїРµСЂРµРІРѕРґРёРј РїРµСЂРёРѕРґ РёР· double РІ int
+    
+
+
     ofstream out1;
     ofstream out2;
     ofstream out3;
     ofstream out4;
-    out1.open("C:/Users/admin/Desktop/Результаты мкп лаба 1/мкп1.txt");
-    out2.open("C:/Users/admin/Desktop/Результаты мкп лаба 1/мкп2.txt");
-    out3.open("C:/Users/admin/Desktop/Результаты мкп лаба 1/мкп3.txt");
-    out4.open("C:/Users/admin/Desktop/Результаты мкп лаба 1/мкп4.txt");
+    out1.open("C:/Users/admin/Desktop/projects/hw_sem_3/LABA-1РњРљРџ/Р РµР·СѓР»СЊС‚Р°С‚С‹ РјРєРї Р»Р°Р±Р° 1/РјРєРї1.txt");
+    out2.open("C:/Users/admin/Desktop/projects/hw_sem_3/LABA-1РњРљРџ/Р РµР·СѓР»СЊС‚Р°С‚С‹ РјРєРї Р»Р°Р±Р° 1/РјРєРї2.txt");
+    out3.open("C:/Users/admin/Desktop/projects/hw_sem_3/LABA-1РњРљРџ/Р РµР·СѓР»СЊС‚Р°С‚С‹ РјРєРї Р»Р°Р±Р° 1/РјРєРї3.txt");
+    out4.open("C:/Users/admin/Desktop/projects/hw_sem_3/LABA-1РњРљРџ/Р РµР·СѓР»СЊС‚Р°С‚С‹ РјРєРї Р»Р°Р±Р° 1/РјРєРї4.txt");
     for (int t = 0; t <= T; t++) {
         double M = n * t;
-        if (out1.is_open() and out2.is_open() and out3.is_open() and out4.is_open())
+        if (out1.is_open() and out2.is_open() and out3.is_open() and out4.is_open()) {
             out1 << Iterations_Type(n, e, M) << endl;
-        out2 << Half_Division_Type(e, M) << endl;
-        out3 << Golden_Ratio_Type(e, M) << endl;
-        out4 << Newton_Type(e, M) << endl;
+            out2 << Half_Division_Type(e, M) << endl;
+            out3 << Golden_Ratio_Type(e, M) << endl;
+            out4 << Newton_Type(e, M) << endl;
+        }  
     }
     out1.close();
     out2.close();
