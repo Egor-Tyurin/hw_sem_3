@@ -93,29 +93,39 @@ int main() {
     double n = sqrt(mu / pow(a, 3)); // Угловая скорость 
     double T_double = (2 * PI) / n;
     int T = static_cast<int>(T_double); //переводим период из double в int
-    
 
 
     ofstream out1;
     ofstream out2;
     ofstream out3;
     ofstream out4;
+    ofstream out5;
+    ofstream out6;
     out1.open("C:/Users/admin/Desktop/projects/hw_sem_3/LABA-1МКП/Результаты мкп лаба 1/мкп1.txt");
     out2.open("C:/Users/admin/Desktop/projects/hw_sem_3/LABA-1МКП/Результаты мкп лаба 1/мкп2.txt");
     out3.open("C:/Users/admin/Desktop/projects/hw_sem_3/LABA-1МКП/Результаты мкп лаба 1/мкп3.txt");
     out4.open("C:/Users/admin/Desktop/projects/hw_sem_3/LABA-1МКП/Результаты мкп лаба 1/мкп4.txt");
+    out5.open("C:/Users/admin/Desktop/projects/hw_sem_3/LABA-1МКП/Результаты мкп лаба 1/мкп5.txt");
+    out6.open("C:/Users/admin/Desktop/projects/hw_sem_3/LABA-1МКП/Результаты мкп лаба 1/мкп6.txt");
     for (int t = 0; t <= T; t++) {
         double M = n * t;
-        if (out1.is_open() and out2.is_open() and out3.is_open() and out4.is_open()) {
-            out1 << Iterations_Type(n, e, M) << endl;
-            out2 << Half_Division_Type(e, M) << endl;
-            out3 << Golden_Ratio_Type(e, M) << endl;
-            out4 << Newton_Type(e, M) << endl;
-        }  
+        double E = Newton_Type(e, M);
+        double teta = atan(sqrt(((1 - e) / (1 + e))) * tan(E / 2)) * 2;
+        if (teta < 0)
+            teta += 2 * PI;
+        out1 << Iterations_Type(n, e, M) << endl;
+        out2 << Half_Division_Type(e, M) << endl;
+        out3 << Golden_Ratio_Type(e, M) << endl;
+        out4 << Newton_Type(e, M) << endl;
+        out5 << M << endl;
+        out6 << teta << endl;
+
     }
     out1.close();
     out2.close();
     out3.close();
     out4.close();
+    out5.close();
+    out6.close();
     return 0;
 }
